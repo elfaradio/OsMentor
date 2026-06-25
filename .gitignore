@@ -14,10 +14,7 @@ frontend/dist/
 frontend/.vite/
 
 # Database and Data
-vector_db/
-data/
-*.sqlite3
-*.db
+
 
 # Environment variables
 .env
