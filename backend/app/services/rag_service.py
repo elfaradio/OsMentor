@@ -5,12 +5,12 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from backend.app.config.settings import Settings, get_settings
-from backend.app.models.response_models import ChatResponse
-from backend.app.services.citation import CitationBuilder
-from backend.app.services.generation import OllamaAnswerGenerator
-from backend.app.services.prompting import build_answer_policy, build_context_block
-from backend.app.services.retrieval import RetrievalService, get_retrieval_service
+from app.config.settings import Settings, get_settings
+from app.models.response_models import ChatResponse
+from app.services.citation import CitationBuilder
+from app.services.generation import OllamaAnswerGenerator
+from app.services.prompting import build_answer_policy, build_context_block
+from app.services.retrieval import RetrievalService, get_retrieval_service
 
 logger = logging.getLogger(__name__)
 

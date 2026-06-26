@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 
 def get_llm(temperature: float = 0.3) -> BaseChatModel:
-    from backend.app.config.settings import get_settings
+    from app.config.settings import get_settings
     settings = get_settings()
     provider = settings.llm_provider.strip().lower()
 
@@ -29,7 +29,7 @@ def _get_groq_llm(temperature: float) -> BaseChatModel:
     """Return a ChatGroq LLM instance (free, fast, cloud-based)."""
     try:
         from langchain_groq import ChatGroq
-        from backend.app.config.settings import get_settings
+        from app.config.settings import get_settings
         settings = get_settings()
 
         if not settings.groq_api_key or settings.groq_api_key == "your_groq_api_key_here":
@@ -52,7 +52,7 @@ def _get_groq_llm(temperature: float) -> BaseChatModel:
 def _get_ollama_llm(temperature: float) -> BaseChatModel:
     """Return a ChatOllama LLM instance (local, slower)."""
     from langchain_ollama import ChatOllama
-    from backend.app.config.settings import get_settings
+    from app.config.settings import get_settings
     settings = get_settings()
 
     return ChatOllama(

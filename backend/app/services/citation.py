@@ -5,7 +5,7 @@ from __future__ import annotations
 from collections import OrderedDict
 from typing import Any
 
-from backend.app.models.response_models import Citation
+from app.models.response_models import Citation
 
 
 class CitationBuilder:

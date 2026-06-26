@@ -5,7 +5,7 @@ from __future__ import annotations
 import logging
 import re
 
-from backend.app.services.generation import OllamaAnswerGenerator
+from app.services.generation import OllamaAnswerGenerator
 
 logger = logging.getLogger(__name__)
 

@@ -5,7 +5,7 @@ from __future__ import annotations
 from functools import lru_cache
 from typing import Any
 
-from backend.app.config.settings import Settings, get_settings
+from app.config.settings import Settings, get_settings
 from rag_pipeline.retriever import HybridRetriever
 
 

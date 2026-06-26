@@ -7,9 +7,9 @@ import logging
 from fastapi import APIRouter, HTTPException
 from fastapi.concurrency import run_in_threadpool
 
-from backend.app.models.request_models import ChatRequest
-from backend.app.models.response_models import ChatResponse
-from backend.app.services.factory import get_rag_service
+from app.models.request_models import ChatRequest
+from app.models.response_models import ChatResponse
+from app.services.factory import get_rag_service
 
 logger = logging.getLogger(__name__)
 

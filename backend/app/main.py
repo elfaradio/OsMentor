@@ -8,11 +8,11 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from backend.app.api.chat import router as chat_router
-from backend.app.api.diagrams import router as study_tools_router
-from backend.app.api.quiz import router as quiz_router
-from backend.app.api.viva import router as viva_router
-from backend.app.config.settings import get_settings
+from app.api.chat import router as chat_router
+from app.api.diagrams import router as study_tools_router
+from app.api.quiz import router as quiz_router
+from app.api.viva import router as viva_router
+from app.config.settings import get_settings
 
 settings = get_settings()
 settings.ensure_directories()

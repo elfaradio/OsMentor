@@ -7,10 +7,10 @@ import logging
 from fastapi import APIRouter, HTTPException
 from fastapi.concurrency import run_in_threadpool
 
-from backend.app.models.request_models import VivaEvaluationRequest, VivaQuestionRequest
-from backend.app.models.response_models import VivaEvaluationResponse, VivaQuestionSetResponse
-from backend.app.services.validation import validate_os_topic
-from backend.app.services.viva_generator import get_viva_service
+from app.models.request_models import VivaEvaluationRequest, VivaQuestionRequest
+from app.models.response_models import VivaEvaluationResponse, VivaQuestionSetResponse
+from app.services.validation import validate_os_topic
+from app.services.viva_generator import get_viva_service
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/viva", tags=["viva"])

@@ -4,8 +4,8 @@ import json
 import logging
 import re
 
-from backend.app.services.generation import AnswerGenerator
-from backend.app.services.retrieval import get_retrieval_service
+from app.services.generation import AnswerGenerator
+from app.services.retrieval import get_retrieval_service
 
 logger = logging.getLogger(__name__)
 
