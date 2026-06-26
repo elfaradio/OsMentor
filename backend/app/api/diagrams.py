@@ -7,11 +7,11 @@ import logging
 from fastapi import APIRouter, HTTPException
 from fastapi.concurrency import run_in_threadpool
 
-from app.models.request_models import ComparisonRequest, DiagramRequest
-from app.models.response_models import ComparisonResponse, DiagramResponse
-from app.services.comparison_generator import get_comparison_service
-from app.services.diagram_generator import get_diagram_service
-from app.services.validation import validate_os_topic
+from backend.app.models.request_models import ComparisonRequest, DiagramRequest
+from backend.app.models.response_models import ComparisonResponse, DiagramResponse
+from backend.app.services.comparison_generator import get_comparison_service
+from backend.app.services.diagram_generator import get_diagram_service
+from backend.app.services.validation import validate_os_topic
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/study-tools", tags=["study-tools"])

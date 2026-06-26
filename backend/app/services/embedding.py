@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from functools import lru_cache
 
-from app.config.settings import get_settings
+from backend.app.config.settings import get_settings
 from rag_pipeline.embeddings import EmbeddingService
 
 

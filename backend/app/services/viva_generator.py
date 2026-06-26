@@ -6,7 +6,7 @@ import json
 import logging
 import re
 
-from app.services.generation import OllamaAnswerGenerator
+from backend.app.services.generation import OllamaAnswerGenerator
 
 logger = logging.getLogger(__name__)
 

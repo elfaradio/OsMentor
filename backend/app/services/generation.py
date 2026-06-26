@@ -9,7 +9,7 @@ import logging
 
 from langchain_core.messages import HumanMessage, SystemMessage
 
-from app.core.llm import get_llm
+from backend.app.core.llm import get_llm
 
 logger = logging.getLogger(__name__)
 

@@ -7,10 +7,10 @@ import logging
 from fastapi import APIRouter, HTTPException
 from fastapi.concurrency import run_in_threadpool
 
-from app.models.request_models import QuizGenerateRequest, QuizSubmitRequest
-from app.models.response_models import QuizGenerateResponse, QuizItem, QuizSubmitResponse
-from app.services.quiz_generator import get_quiz_service
-from app.services.validation import validate_os_topic
+from backend.app.models.request_models import QuizGenerateRequest, QuizSubmitRequest
+from backend.app.models.response_models import QuizGenerateResponse, QuizItem, QuizSubmitResponse
+from backend.app.services.quiz_generator import get_quiz_service
+from backend.app.services.validation import validate_os_topic
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/quiz", tags=["quiz"])
