@@ -1,6 +1,6 @@
 # 🎓 OsMentor AI
 
-Welcome to **OsMentor AI**, your personal Operating Systems tutoring chatbot! 
+Welcome to **OsMentor AI**, your personal Operating Systems tutoring chatbot!
 OsMentor AI is powered by a robust Retrieval-Augmented Generation (RAG) backend to provide accurate, textbook-grounded answers to your OS questions.
 
 ---
@@ -17,12 +17,14 @@ OsMentor AI is powered by a robust Retrieval-Augmented Generation (RAG) backend 
 ## 🛠️ Tech Stack
 
 **Frontend:**
+
 - React (Vite)
 - Tailwind CSS
 - React Router DOM
 - Mermaid (for dynamic diagrams)
 
 **Backend:**
+
 - Python 3.12 & FastAPI
 - LangChain & Sentence Transformers
 - ChromaDB (Vector Database)
@@ -36,6 +38,7 @@ OsMentor AI is powered by a robust Retrieval-Augmented Generation (RAG) backend 
 Follow these steps to get OsMentor AI up and running on your local machine.
 
 ### Prerequisites
+
 - Python 3.12+
 - Node.js & npm
 
@@ -56,7 +59,7 @@ pip install -r backend/requirements.txt
 
 # Set up environment variables
 cp .env.example .env
-# Open .env and add your GOOGLE_API_KEY (or other provider keys)
+# Open .env and add your GROQ API KEY (or other provider keys)
 ```
 
 ### 2. Frontend Setup
@@ -79,12 +82,14 @@ npm install
 You'll need to run both the backend API and the frontend development server.
 
 **Start the Backend:**
+
 ```bash
 # Ensure your virtual environment is active
 uvicorn backend.app.main:app --reload
 ```
 
 **Start the Frontend:**
+
 ```bash
 cd frontend
 npm run dev
@@ -101,7 +106,7 @@ Before the chatbot can answer questions, you need to feed it some data!
    ```bash
    python -m rag_pipeline.index
    ```
-   *Note: If you want to run steps individually, you can use `python -m rag_pipeline.ingest` followed by `python -m rag_pipeline.chunking`.*
+   _Note: If you want to run steps individually, you can use `python -m rag_pipeline.ingest` followed by `python -m rag_pipeline.chunking`._
 
 ---
 
