@@ -1,4 +1,4 @@
-"""Concept comparison helpers powered by Gemini."""
+"""Concept comparison helpers for OSMentor AI."""
 
 from __future__ import annotations
 
@@ -6,7 +6,6 @@ import json
 import logging
 import re
 
-from backend.app.config.settings import get_settings
 from backend.app.services.generation import OllamaAnswerGenerator
 
 logger = logging.getLogger(__name__)
@@ -48,7 +47,7 @@ class ComparisonService:
     def __init__(self) -> None:
         self._generator = OllamaAnswerGenerator()
 
-    def compare(self, concept_a: str, concept_b: str) -> dict[str, object]:
+    def compare(self, concept_a: str, concept_b: str, context: str | None = None) -> dict[str, object]:
         system_prompt = (
             "You are an expert Operating Systems professor. "
             "Generate a detailed, accurate comparison table between two OS concepts. "
@@ -59,14 +58,20 @@ class ComparisonService:
             "Address Translation, Use Cases, Advantages, Disadvantages. "
             "Each cell must contain a specific, factual, detailed explanation — NOT a generic placeholder."
         )
+        
+        import random
+        salt = random.randint(10000, 99999)
+        context_block = f"Use the following verified context from the textbooks for grounding:\n{context}\n\n" if context else ""
         user_prompt = (
+            f"{context_block}"
             f"Compare '{concept_a}' and '{concept_b}' in Operating Systems.\n"
             f"Provide 7 distinct aspects. Be specific and technical.\n"
+            f"Randomizer seed: {salt}\n"
             f'Return a JSON object with keys: title, concept_a, concept_b, rows.\n'
             f'Each row: {{"aspect": "...", "concept_a": "...", "concept_b": "..."}}'
         )
 
-        response = self._generator.generate_structured(system_prompt, user_prompt)
+        response = self._generator.generate_creative(system_prompt, user_prompt)
         parsed = _parse_json(response)
 
         if isinstance(parsed, dict) and "rows" in parsed:

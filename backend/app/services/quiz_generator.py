@@ -1,4 +1,4 @@
-"""Quiz generation helpers powered by Gemini."""
+"""Quiz generation helpers for OSMentor AI."""
 
 from __future__ import annotations
 
@@ -48,7 +48,7 @@ class QuizService:
     def __init__(self) -> None:
         self._generator = OllamaAnswerGenerator()
 
-    def generate_mcq(self, topic: str, difficulty: str, count: int) -> list[dict[str, object]]:
+    def generate_mcq(self, topic: str, difficulty: str, count: int, context: str | None = None) -> list[dict[str, object]]:
         difficulty_guidance = {
             "easy": "factual recall and basic definitions",
             "medium": "conceptual understanding and how mechanisms work internally",
@@ -61,12 +61,18 @@ class QuizService:
             '"question" (string), "type" (always "mcq"), "options" (array of exactly 4 strings), '
             '"answer" (string, must exactly match one of the options).'
         )
+        
+        import random
+        salt = random.randint(10000, 99999)
+        context_block = f"Use the following verified context from the textbooks for grounding:\n{context}\n\n" if context else ""
         user_prompt = (
+            f"{context_block}"
             f"Generate {count} unique, non-repetitive multiple choice questions about '{topic}' in Operating Systems.\n"
             f"Difficulty level: {difficulty} — focus on {difficulty_guidance}.\n"
+            f"Randomizer seed: {salt}\n"
             f"Return a JSON array with exactly {count} items."
         )
-        response = self._generator.generate_structured(system_prompt, user_prompt)
+        response = self._generator.generate_creative(system_prompt, user_prompt)
         parsed = _parse_json_from_response(response)
         
         if isinstance(parsed, dict):
@@ -94,20 +100,26 @@ class QuizService:
         # Fallback to template if parsing completely fails
         return self._fallback_mcq(topic, difficulty, count)
 
-    def generate_short_questions(self, topic: str, difficulty: str, count: int) -> list[dict[str, object]]:
+    def generate_short_questions(self, topic: str, difficulty: str, count: int, context: str | None = None) -> list[dict[str, object]]:
         system_prompt = (
             "You are an Operating Systems quiz generator. Generate unique short answer questions. "
             "Return ONLY a JSON array with no additional text. Each item must have: "
             '"question" (string), "type" (always "short"), "options" (always empty array []), '
             '"answer" (string, a model answer in 2-4 sentences).'
         )
+        
+        import random
+        salt = random.randint(10000, 99999)
+        context_block = f"Use the following verified context from the textbooks for grounding:\n{context}\n\n" if context else ""
         user_prompt = (
+            f"{context_block}"
             f"Generate exactly {count} distinct short answer questions about '{topic}' in Operating Systems.\n"
             f"Difficulty level: {difficulty}.\n"
             f"Questions should require conceptual explanations, not just definitions.\n"
+            f"Randomizer seed: {salt}\n"
             f"Return a JSON array with exactly {count} items."
         )
-        response = self._generator.generate_structured(system_prompt, user_prompt)
+        response = self._generator.generate_creative(system_prompt, user_prompt)
         parsed = _parse_json_from_response(response)
         
         if isinstance(parsed, dict):

@@ -20,8 +20,8 @@ export default function VivaPage() {
         try {
             const response = await generateVivaQuestions({ topic: topic.trim(), difficulty, count: 3 });
             setQuestions(response.questions);
-        } catch {
-            setError('Failed to generate viva questions. Please try again.');
+        } catch (err) {
+            setError(err.response?.data?.detail || 'Failed to generate viva questions. Please try again.');
         } finally {
             setIsGenerating(false);
         }
@@ -34,8 +34,8 @@ export default function VivaPage() {
         try {
             const response = await evaluateVivaAnswer({ question, student_answer: studentAnswer, topic });
             setEvaluation(response);
-        } catch {
-            setError('Failed to evaluate answer. Please try again.');
+        } catch (err) {
+            setError(err.response?.data?.detail || 'Failed to evaluate answer. Please try again.');
         } finally {
             setIsEvaluating(false);
         }

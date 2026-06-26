@@ -29,6 +29,7 @@ export default function Dashboard() {
     const [isComparing, setIsComparing] = useState(false);
     const [isDiagramLoading, setIsDiagramLoading] = useState(false);
     const [compareError, setCompareError] = useState(null);
+    const [diagramError, setDiagramError] = useState(null);
 
     const runCompare = async () => {
         if (!conceptA.trim() || !conceptB.trim()) return;
@@ -37,8 +38,8 @@ export default function Dashboard() {
         try {
             const response = await compareConcepts({ concept_a: conceptA.trim(), concept_b: conceptB.trim() });
             setComparison(response);
-        } catch {
-            setCompareError('Failed to compare concepts. Please try again.');
+        } catch (err) {
+            setCompareError(err.response?.data?.detail || 'Failed to compare concepts. Please try again.');
         } finally {
             setIsComparing(false);
         }
@@ -47,9 +48,12 @@ export default function Dashboard() {
     const runDiagram = async (payload) => {
         setIsDiagramLoading(true);
         setDiagram('');
+        setDiagramError(null);
         try {
             const response = await generateDiagram(payload);
             setDiagram(response.mermaid);
+        } catch (err) {
+            setDiagramError(err.response?.data?.detail || 'Failed to generate diagram. Please try again.');
         } finally {
             setIsDiagramLoading(false);
         }
@@ -143,7 +147,7 @@ export default function Dashboard() {
                 )}
             </section>
 
-            <DiagramPanel onGenerate={runDiagram} chart={diagram} isLoading={isDiagramLoading} />
+            <DiagramPanel onGenerate={runDiagram} chart={diagram} isLoading={isDiagramLoading} error={diagramError} />
         </div>
     );
 }

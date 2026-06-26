@@ -160,7 +160,7 @@ export default function Sidebar() {
                     <div className="space-y-1">
                         <p className="text-[10px] text-slate-600">Powered by</p>
                         <div className="flex flex-wrap gap-1">
-                            <span className="chip chip-cyan">Ollama</span>
+                            <span className="chip chip-cyan">Groq AI</span>
                             <span className="chip chip-indigo">ChromaDB</span>
                             <span className="chip chip-indigo" style={{ color: '#a78bfa', borderColor: 'rgba(167,139,250,0.2)', background: 'rgba(167,139,250,0.1)' }}>RAG</span>
                         </div>

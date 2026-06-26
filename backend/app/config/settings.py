@@ -32,8 +32,19 @@ class Settings(BaseSettings):
     chroma_collection_name: str = "osmentor_chunks"
 
     embedding_model_name: str = "BAAI/bge-small-en-v1.5"
+
+    # ── LLM Provider ───────────────────────────────────────────────────────────
+    # Set to "groq" for fast free API, or "ollama" for local model
+    llm_provider: str = "groq"
+
+    # Groq settings (free & fast — get key at https://console.groq.com/keys)
+    groq_api_key: str = ""
+    groq_model_name: str = "llama-3.1-8b-instant"
+
+    # Ollama settings (local fallback)
     ollama_model_name: str = "llama3.2"
     ollama_base_url: str = "http://localhost:11434"
+
     reranker_model_name: str = "cross-encoder/ms-marco-MiniLM-L-6-v2"
     hybrid_dense_weight: float = 0.7
     hybrid_sparse_weight: float = 0.3

@@ -1,4 +1,4 @@
-"""Viva generation helpers powered by Gemini."""
+"""Viva generation helpers for OSMentor AI."""
 
 from __future__ import annotations
 
@@ -47,7 +47,7 @@ class VivaService:
     def __init__(self) -> None:
         self._generator = OllamaAnswerGenerator()
 
-    def generate_questions(self, topic: str, difficulty: str, count: int) -> list[str]:
+    def generate_questions(self, topic: str, difficulty: str, count: int, context: str | None = None) -> list[str]:
         difficulty_guidance = {
             "easy": "factual recall and basic definitions (suitable for first-year students)",
             "medium": "conceptual understanding, trade-offs, and how mechanisms work internally",
@@ -60,7 +60,12 @@ class VivaService:
             "Each question must be distinctly different — no repetitive patterns. "
             "Return ONLY a JSON array of question strings, with no extra text or markdown."
         )
+        
+        import random
+        salt = random.randint(10000, 99999)
+        context_block = f"Use the following verified context from the textbooks for grounding:\n{context}\n\n" if context else ""
         user_prompt = (
+            f"{context_block}"
             f"Generate exactly {count} viva questions about '{topic}' in Operating Systems.\n"
             f"Difficulty: {difficulty} — focus on {difficulty_guidance}.\n"
             f"Requirements:\n"
@@ -68,10 +73,11 @@ class VivaService:
             f"- Mix question types: 'explain', 'compare', 'what happens when', 'how does X relate to Y', 'design a'\n"
             f"- Questions should be open-ended and require thoughtful answers\n"
             f"- Be specific to {topic}, not generic OS questions\n"
+            f"Randomizer seed: {salt}\n"
             f"Return a JSON array of exactly {count} question strings."
         )
 
-        response = self._generator.generate_structured(system_prompt, user_prompt)
+        response = self._generator.generate_creative(system_prompt, user_prompt)
         parsed = _parse_json(response)
 
         if isinstance(parsed, dict):

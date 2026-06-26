@@ -290,3 +290,11 @@ select.input-field option { background: #0f172a; color: #e2e8f0; }
   animation: shimmer 1.6s ease-in-out infinite;
   border-radius: 0.375rem;
 }
+
+/* ─── Mermaid SVG Scaling ───────────────────────────────────────────────── */
+.mermaid-svg-container svg {
+  max-width: 100%;
+  height: auto !important;
+  max-height: 480px;
+}
+

@@ -31,8 +31,8 @@ export default function QuizPage() {
         try {
             const response = await generateQuiz(payload);
             setQuiz(response);
-        } catch {
-            setError('Failed to generate quiz. Please try again.');
+        } catch (err) {
+            setError(err.response?.data?.detail || 'Failed to generate quiz. Please try again.');
         } finally {
             setIsGenerating(false);
         }
@@ -46,8 +46,8 @@ export default function QuizPage() {
             const response = await submitQuiz({ answers: answerList, answer_key: key });
             setResult(response);
             window.scrollTo({ top: 0, behavior: 'smooth' });
-        } catch {
-            setError('Failed to submit quiz. Please try again.');
+        } catch (err) {
+            setError(err.response?.data?.detail || 'Failed to submit quiz. Please try again.');
         } finally {
             setIsSubmitting(false);
         }

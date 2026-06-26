@@ -37,6 +37,9 @@ def _sanitize_mermaid(text: str) -> str:
     for line in text.splitlines():
         # Remove inline comments that Mermaid can't render
         line = re.sub(r"\s*//.*$", "", line)
+        # Fix invalid label arrow endings: -->|label|> to -->|label|
+        line = re.sub(r"-->\s*\|([^|]+)\|\s*>", r"-->|\1|", line)
+
         # Fix unquoted parentheses in node labels: A[label (extra)] -> A["label (extra)"]
         # Only fix if not already quoted
         def quote_bracket_content(m: re.Match) -> str:
@@ -58,7 +61,7 @@ class DiagramService:
     def __init__(self) -> None:
         self._generator = OllamaAnswerGenerator()
 
-    def generate(self, diagram_type: str, topic: str) -> str:
+    def generate(self, diagram_type: str, topic: str, context: str | None = None) -> str:
         description = DIAGRAM_TYPE_DESCRIPTIONS.get(
             diagram_type,
             "flowchart diagram illustrating the concept",
@@ -82,13 +85,16 @@ class DiagramService:
             "4. Node labels with spaces, parentheses, colons, or special characters MUST be wrapped in double quotes.\n"
             '   CORRECT:   P1["Process (Running)"]  or  B{"CPU Scheduler"}\n'
             "   WRONG:     P1[Process (Running)]    or  B{CPU Scheduler}\n"
-            "5. Arrow syntax: use `-->` for flowcharts, `--` for stateDiagram. No other arrow styles.\n"
+            "5. Arrow syntax: use `-->` for flowcharts. For labels, use `-->|label|` ONLY.\n"
+            "   NEVER use `-->|label|>` or add an extra `>` at the end. That is invalid syntax.\n"
             "6. For stateDiagram-v2: states are bare words, transitions use `-->` with a colon label: `Ready --> Running : dispatch`.\n"
             "7. Make the diagram detailed (8-12 nodes minimum) and specific to the requested OS topic.\n"
             "8. Do NOT include numbered lists, English prose, or any text outside the diagram syntax."
         )
 
+        context_block = f"Use the following verified context from the textbooks for grounding:\n{context}\n\n" if context else ""
         user_prompt = (
+            f"{context_block}"
             f"Generate a {description} about the OS topic: '{topic}'.\n"
             f"The diagram MUST start with `{directive}` on line 1.\n"
             f"Include at least 8 nodes/states with meaningful OS-specific labels.\n"

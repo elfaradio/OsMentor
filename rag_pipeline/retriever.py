@@ -92,12 +92,12 @@ class RetrieverService:
             ).hexdigest())
             existing = merged.get(chunk_id, {})
             combined = dict(existing)
-            for key, value in candidate.items():
-                if key in {"dense_score", "bm25_score", "sparse_score", "hybrid_score"}:
-                    existing_value = combined.get(key)
+            for field, value in candidate.items():
+                if field in {"dense_score", "bm25_score", "sparse_score", "hybrid_score"}:
+                    existing_value = combined.get(field)
                     if existing_value not in (None, 0, 0.0) and value in (None, 0, 0.0):
                         continue
-                combined[key] = value
+                combined[field] = value
             combined["chunk_id"] = chunk_id
             merged[chunk_id] = combined
 
