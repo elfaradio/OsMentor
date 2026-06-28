@@ -13,7 +13,7 @@ export default function QuizGenerator({ onGenerate, isLoading }) {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (!topic.trim()) return;
-        onGenerate({ topic: topic.trim(), difficulty, mcq_count: 5, short_count: 2 });
+        onGenerate({ topic: topic.trim(), difficulty, mcq_count: 7, short_count: 0 });
     };
 
     return (

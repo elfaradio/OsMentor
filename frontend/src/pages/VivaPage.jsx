@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import VivaMode from '../components/Viva/VivaMode';
 import { evaluateVivaAnswer, generateVivaQuestions } from '../services/ragService';
+import { normalizeQuestions } from '../utils/vivaHelper';
 
 export default function VivaPage() {
     const [topic, setTopic] = useState('CPU Scheduling');
@@ -19,7 +20,7 @@ export default function VivaPage() {
         setEvaluation(null);
         try {
             const response = await generateVivaQuestions({ topic: topic.trim(), difficulty, count: 3 });
-            setQuestions(response.questions);
+            setQuestions(normalizeQuestions(response.questions || response));
         } catch (err) {
             setError(err.response?.data?.detail || 'Failed to generate viva questions. Please try again.');
         } finally {
@@ -128,6 +129,7 @@ export default function VivaPage() {
                     onEvaluate={handleEvaluate}
                     evaluation={evaluation}
                     isEvaluating={isEvaluating}
+                    onQuestionChange={() => setEvaluation(null)}
                 />
             )}
         </div>

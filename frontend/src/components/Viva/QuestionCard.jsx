@@ -1,4 +1,7 @@
 export default function QuestionCard({ question, index, isActive }) {
+    // Type Safety / format compatibility
+    const questionText = question && typeof question === 'object' ? question.question : String(question || '');
+
     return (
         <div
             className={`rounded-xl border px-4 py-3 text-sm transition-all duration-200 ${
@@ -18,7 +21,7 @@ export default function QuestionCard({ question, index, isActive }) {
                     {index + 1}
                 </span>
                 <span className={`leading-relaxed transition-colors ${isActive ? 'text-cyan-200' : 'text-slate-700 dark:text-slate-300'}`}>
-                    {question}
+                    {questionText}
                 </span>
                 {isActive && (
                     <span className="ml-auto shrink-0 rounded-full bg-cyan-500/20 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-cyan-400">

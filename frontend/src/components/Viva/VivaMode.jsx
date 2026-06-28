@@ -1,19 +1,37 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import QuestionCard from './QuestionCard';
 
-export default function VivaMode({ questions, onEvaluate, evaluation, isEvaluating }) {
-    const [selectedQuestion, setSelectedQuestion] = useState(questions[0] || '');
+export default function VivaMode({ questions, onEvaluate, evaluation, isEvaluating, onQuestionChange }) {
+    // Type Safety / Validation check
+    if (questions && !Array.isArray(questions)) {
+        console.error("Type Safety Violation: questions prop must be an array, but received:", questions);
+    }
+
+    const [activeIndex, setActiveIndex] = useState(0);
     const [answer, setAnswer] = useState('');
 
+    // Synchronize currentQuestion (no stale state / race conditions)
+    const currentQuestion = questions && Array.isArray(questions) ? questions[activeIndex] : null;
+
+    // Reset activeIndex and answer when questions list updates (e.g. newly generated set)
+    useEffect(() => {
+        setActiveIndex(0);
+        setAnswer('');
+    }, [questions]);
+
     const handleEvaluate = () => {
-        onEvaluate(selectedQuestion, answer);
+        if (currentQuestion) {
+            onEvaluate(currentQuestion.question, answer);
+        }
     };
 
-    const scoreColor = evaluation
-        ? evaluation.score >= 70 ? 'text-emerald-400 border-emerald-500/40 bg-emerald-500/10'
-        : evaluation.score >= 40 ? 'text-amber-400 border-amber-500/40 bg-amber-500/10'
-        : 'text-red-400 border-red-500/40 bg-red-500/10'
-        : '';
+    const handleSelectQuestion = (index) => {
+        setActiveIndex(index);
+        setAnswer('');
+        if (onQuestionChange) {
+            onQuestionChange();
+        }
+    };
 
     return (
         <div className="space-y-5">
@@ -22,29 +40,34 @@ export default function VivaMode({ questions, onEvaluate, evaluation, isEvaluati
                 <p className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-3">
                     Select a question to answer
                 </p>
-                {questions.map((question, index) => (
-                    <button
-                        key={question}
-                        className="block w-full text-left"
-                        onClick={() => { setSelectedQuestion(question); setAnswer(''); }}
-                    >
-                        <QuestionCard
-                            question={question}
-                            index={index}
-                            isActive={selectedQuestion === question}
-                        />
-                    </button>
-                ))}
+                {Array.isArray(questions) && questions.map((question, index) => {
+                    const qId = question && typeof question === 'object' ? question.id : index + 1;
+                    const qText = question && typeof question === 'object' ? question.question : String(question);
+
+                    return (
+                        <button
+                            key={qId}
+                            className="block w-full text-left"
+                            onClick={() => handleSelectQuestion(index)}
+                        >
+                            <QuestionCard
+                                question={qText}
+                                index={index}
+                                isActive={activeIndex === index}
+                            />
+                        </button>
+                    );
+                })}
             </div>
 
             {/* Answer section */}
             <div className="glass-panel p-5 space-y-4 fade-in">
-                {selectedQuestion ? (
+                {currentQuestion ? (
                     <div className="flex items-start gap-2 rounded-lg border border-cyan-500/20 bg-cyan-500/5 px-3 py-2.5">
                         <svg className="mt-0.5 h-4 w-4 shrink-0 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
-                        <p className="text-sm text-cyan-300 leading-relaxed">{selectedQuestion}</p>
+                        <p className="text-sm text-cyan-300 leading-relaxed">{currentQuestion.question}</p>
                     </div>
                 ) : (
                     <p className="text-sm text-slate-500 italic">Select a question above to begin…</p>
@@ -63,7 +86,7 @@ export default function VivaMode({ questions, onEvaluate, evaluation, isEvaluati
 
                 <button
                     onClick={handleEvaluate}
-                    disabled={isEvaluating || !selectedQuestion || !answer.trim()}
+                    disabled={isEvaluating || !currentQuestion || !answer.trim()}
                     className="btn-primary flex items-center gap-2"
                 >
                     {isEvaluating ? (

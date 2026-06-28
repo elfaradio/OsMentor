@@ -17,10 +17,15 @@ class ChatResponse(BaseModel):
     citations: list[Citation] = Field(default_factory=list)
 
 
+class VivaQuestion(BaseModel):
+    id: int
+    question: str
+
+
 class VivaQuestionSetResponse(BaseModel):
     topic: str
     difficulty: str
-    questions: list[str] = Field(default_factory=list)
+    questions: list[VivaQuestion] = Field(default_factory=list)
 
 
 class VivaEvaluationResponse(BaseModel):

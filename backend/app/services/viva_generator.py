@@ -47,7 +47,7 @@ class VivaService:
     def __init__(self) -> None:
         self._generator = OllamaAnswerGenerator()
 
-    def generate_questions(self, topic: str, difficulty: str, count: int, context: str | None = None) -> list[str]:
+    def generate_questions(self, topic: str, difficulty: str, count: int, context: str | None = None) -> list[dict[str, object]]:
         difficulty_guidance = {
             "easy": "factual recall and basic definitions (suitable for first-year students)",
             "medium": "conceptual understanding, trade-offs, and how mechanisms work internally",
@@ -87,15 +87,46 @@ class VivaService:
                     parsed = parsed[key]
                     break
 
+        normalized_questions = []
         if isinstance(parsed, list):
-            questions = [str(q).strip() for q in parsed if str(q).strip()]
-            if len(questions) >= count:
-                return questions[:count]
-            if questions:
-                return questions  # Return what we got even if fewer
+            for item in parsed:
+                q_text = ""
+                if isinstance(item, dict):
+                    q_text = str(item.get("question", item.get("text", ""))).strip()
+                elif isinstance(item, str):
+                    item_str = item.strip()
+                    # Try parsing as JSON first
+                    try:
+                        loaded = json.loads(item_str)
+                        if isinstance(loaded, dict):
+                            q_text = str(loaded.get("question", loaded.get("text", ""))).strip()
+                        else:
+                            q_text = str(loaded).strip()
+                    except Exception:
+                        # Try parsing as Python literal dict fallback (e.g. if single quotes are used)
+                        if item_str.startswith("{") and item_str.endswith("}"):
+                            try:
+                                import ast
+                                loaded = ast.literal_eval(item_str)
+                                if isinstance(loaded, dict):
+                                    q_text = str(loaded.get("question", loaded.get("text", ""))).strip()
+                            except Exception:
+                                pass
+                        if not q_text:
+                            q_text = item_str
 
-        logger.warning("Falling back to template viva questions for topic: %s", topic)
-        return self._fallback(topic, difficulty, count)
+                if q_text:
+                    normalized_questions.append(q_text)
+
+        if not normalized_questions:
+            logger.warning("Falling back to template viva questions for topic: %s", topic)
+            normalized_questions = self._fallback(topic, difficulty, count)
+
+        # Build list of dicts with sequential IDs starting from 1
+        return [
+            {"id": idx + 1, "question": q}
+            for idx, q in enumerate(normalized_questions[:count])
+        ]
 
     def evaluate_answer(self, question: str, student_answer: str, topic: str) -> dict[str, object]:
         system_prompt = (
