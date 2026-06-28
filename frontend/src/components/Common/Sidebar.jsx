@@ -49,6 +49,20 @@ const links = [
         color: 'from-emerald-500 to-teal-500',
         glow: 'rgba(16,185,129,0.35)',
     },
+    {
+        to: '/scheduler',
+        label: 'Visualize Scheduling',
+        desc: 'Interactive CPU simulator',
+        icon: (
+            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <rect width="16" height="16" x="4" y="4" rx="2" />
+                <rect width="6" height="6" x="9" y="9" rx="1" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 15h3M1 9h3M1 15h3" />
+            </svg>
+        ),
+        color: 'from-rose-500 to-pink-500',
+        glow: 'rgba(244,63,94,0.35)',
+    },
 
 ];
 

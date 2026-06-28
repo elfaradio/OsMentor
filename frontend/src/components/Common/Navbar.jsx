@@ -6,6 +6,7 @@ const PAGE_META = {
     '/chat':     { title: 'AI Chat',      description: 'Ask anything about Operating Systems — powered by textbook RAG', emoji: '💬' },
     '/quiz':     { title: 'Quiz Mode',    description: 'Test your knowledge with AI-generated MCQ and short answer questions', emoji: '📝' },
     '/viva':     { title: 'Viva Mode',    description: 'Practice oral examination questions with instant AI feedback', emoji: '🎤' },
+    '/scheduler': { title: 'Visualize Scheduling', description: 'Interactive CPU scheduling simulator and algorithms visualiser', emoji: '⚡' },
 };
 
 export default function Navbar() {

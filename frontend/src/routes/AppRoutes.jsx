@@ -8,6 +8,7 @@ import Dashboard from '../pages/Dashboard';
 import ChatPage from '../pages/ChatPage';
 import QuizPage from '../pages/QuizPage';
 import VivaPage from '../pages/VivaPage';
+import SchedulerPage from '../pages/SchedulerPage';
 
 /* App shell shared by all protected pages */
 function AppShell({ children }) {
@@ -46,6 +47,7 @@ export default function AppRoutes() {
             <Route path="/chat"  element={<Protected><ChatPage /></Protected>} />
             <Route path="/quiz"  element={<Protected><QuizPage /></Protected>} />
             <Route path="/viva"  element={<Protected><VivaPage /></Protected>} />
+            <Route path="/scheduler" element={<Protected><SchedulerPage /></Protected>} />
 
             <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
