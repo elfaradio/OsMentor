@@ -2,8 +2,13 @@ import { useState } from 'react';
 import ChatInput from '../components/Chat/ChatInput';
 import ChatWindow from '../components/Chat/ChatWindow';
 import { chat } from '../services/ragService';
+import { useAuth } from '../context/AuthContext';
 
 export default function ChatPage() {
+    const { currentUser } = useAuth();
+    const userDisplayName = currentUser?.displayName || currentUser?.email?.split('@')[0] || 'You';
+    const userPhotoURL = currentUser?.photoURL || null;
+
     const [messages, setMessages] = useState([
         { role: 'assistant', content: "Hello! I'm OSMentor AI, your Operating Systems tutor. Ask me anything about processes, memory management, scheduling, deadlocks, file systems, or any other OS concept — I'll give you a detailed, textbook-grounded answer!" },
     ]);
@@ -39,7 +44,12 @@ export default function ChatPage() {
                     <p className="text-sm text-slate-500 mt-0.5">Powered by RAG with your OS textbooks</p>
                 </div>
             </div>
-            <ChatWindow messages={messages} isLoading={loading} />
+            <ChatWindow
+                messages={messages}
+                isLoading={loading}
+                userPhotoURL={userPhotoURL}
+                userDisplayName={userDisplayName}
+            />
             <ChatInput onSend={onSend} disabled={loading} />
         </div>
     );

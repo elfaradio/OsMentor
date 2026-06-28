@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import MessageBubble from './MessageBubble';
 
-export default function ChatWindow({ messages, isLoading }) {
+export default function ChatWindow({ messages, isLoading, userPhotoURL, userDisplayName }) {
     const bottomRef = useRef(null);
 
     useEffect(() => {
@@ -39,6 +39,8 @@ export default function ChatWindow({ messages, isLoading }) {
                         key={`${message.role}-${index}`}
                         role={message.role}
                         content={message.content}
+                        userPhotoURL={userPhotoURL}
+                        userDisplayName={userDisplayName}
                     />
                 ))}
 

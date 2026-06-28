@@ -1,16 +1,28 @@
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 const PAGE_META = {
-    '/':         { title: 'Study Tools',  description: 'Compare OS concepts and visualize them with AI-generated diagrams', emoji: '📚' },
+    '/app':      { title: 'Study Tools',  description: 'Compare OS concepts and visualize them with AI-generated diagrams', emoji: '📚' },
     '/chat':     { title: 'AI Chat',      description: 'Ask anything about Operating Systems — powered by textbook RAG', emoji: '💬' },
     '/quiz':     { title: 'Quiz Mode',    description: 'Test your knowledge with AI-generated MCQ and short answer questions', emoji: '📝' },
     '/viva':     { title: 'Viva Mode',    description: 'Practice oral examination questions with instant AI feedback', emoji: '🎤' },
-
 };
 
 export default function Navbar() {
     const { pathname } = useLocation();
-    const meta = PAGE_META[pathname] || PAGE_META['/'];
+    const navigate = useNavigate();
+    const meta = PAGE_META[pathname] || PAGE_META['/app'];
+    const { currentUser, signOut } = useAuth();
+
+    const handleSignOut = async () => {
+        // Navigate to home page first so ProtectedRoute doesn't redirect to /auth
+        navigate('/');
+        await signOut();
+    };
+
+    const avatarUrl = currentUser?.photoURL || null;
+    const displayName = currentUser?.displayName || currentUser?.email?.split('@')[0] || 'User';
+    const initials = displayName.slice(0, 2).toUpperCase();
 
     return (
         <header
@@ -52,6 +64,48 @@ export default function Navbar() {
                     </span>
                     <span className="text-[11px] font-semibold text-emerald-400">Live</span>
                 </div>
+
+                {/* User avatar + sign-out */}
+                {currentUser && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginLeft: '0.25rem' }}>
+                        {/* Avatar */}
+                        <div
+                            title={displayName}
+                            style={{
+                                width: '1.875rem', height: '1.875rem', borderRadius: '50%',
+                                background: avatarUrl ? `url(${avatarUrl}) center/cover no-repeat` : 'linear-gradient(135deg,#0891b2,#6366f1)',
+                                border: '1.5px solid rgba(99,102,241,0.45)',
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                fontSize: '0.6875rem', fontWeight: 700, color: '#fff',
+                                flexShrink: 0, cursor: 'default',
+                                boxShadow: '0 0 10px rgba(99,102,241,0.25)',
+                            }}
+                        >
+                            {!avatarUrl && initials}
+                        </div>
+
+                        {/* Sign out */}
+                        <button
+                            id="navbar-signout-btn"
+                            onClick={handleSignOut}
+                            title="Sign out"
+                            style={{
+                                display: 'flex', alignItems: 'center', gap: '0.3rem',
+                                background: 'rgba(239,68,68,0.07)', border: '1px solid rgba(239,68,68,0.2)',
+                                borderRadius: '0.5rem', padding: '0.3rem 0.6rem',
+                                color: '#f87171', fontSize: '0.6875rem', fontWeight: 600,
+                                cursor: 'pointer', transition: 'background 0.18s, border-color 0.18s',
+                            }}
+                            onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(239,68,68,0.14)'; }}
+                            onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(239,68,68,0.07)'; }}
+                        >
+                            <svg style={{ width: '0.75rem', height: '0.75rem' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                            </svg>
+                            Sign out
+                        </button>
+                    </div>
+                )}
             </div>
         </header>
     );

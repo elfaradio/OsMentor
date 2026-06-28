@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom';
 
 const links = [
     {
-        to: '/',
+        to: '/app',
         label: 'Study Tools',
         desc: 'Compare & diagram',
         icon: (
@@ -91,7 +91,7 @@ export default function Sidebar() {
                     <NavLink
                         key={link.to}
                         to={link.to}
-                        end={link.to === '/'}
+                        end={link.to === '/app'}
                         className={({ isActive }) =>
                             `group relative flex items-center gap-3 rounded-xl px-3 py-2.5 transition-all duration-200 ${
                                 isActive
