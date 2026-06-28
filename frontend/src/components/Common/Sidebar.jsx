@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 
 const links = [
     {
@@ -77,10 +77,10 @@ export default function Sidebar() {
             }}
         >
             {/* ── Logo ────────────────────────────────── */}
-            <div className="px-5 pt-6 pb-5">
+            <Link to="/" className="px-5 pt-6 pb-5 block cursor-pointer group hover:no-underline">
                 <div className="flex items-center gap-3">
                     <div
-                        className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-xl"
+                        className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-xl transition-transform duration-200 group-hover:scale-105"
                         style={{ background: 'linear-gradient(135deg,#0891b2,#6366f1)', boxShadow: '0 0 20px rgba(6,182,212,0.3)' }}
                     >
                         <svg className="h-4.5 w-4.5 text-slate-900 dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} style={{ width: '1.125rem', height: '1.125rem' }}>
@@ -88,11 +88,11 @@ export default function Sidebar() {
                         </svg>
                     </div>
                     <div>
-                        <h1 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight leading-none">OSMentor AI</h1>
+                        <h1 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight leading-none transition-colors group-hover:text-cyan-400">OSMentor AI</h1>
                         <p className="text-[10px] text-slate-500 mt-0.5 leading-none">Operating Systems Tutor</p>
                     </div>
                 </div>
-            </div>
+            </Link>
 
             {/* ── Section label ───────────────────────── */}
             <div className="px-5 mb-2">
